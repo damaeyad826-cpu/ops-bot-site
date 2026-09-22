@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPs Bot - Dashboard</title>
-    <!-- FontAwesome for Icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -38,7 +38,6 @@
             flex-direction: column;
         }
 
-        /* Navbar Header */
         header {
             display: flex;
             justify-content: space-between;
@@ -96,7 +95,6 @@
             transform: translateY(-2px);
         }
 
-        /* Banner Hero Section */
         .hero-banner {
             padding: 40px 50px;
             background: radial-gradient(ellipse at top, rgba(29, 78, 216, 0.25) 0%, transparent 70%);
@@ -128,7 +126,6 @@
             font-size: 0.95rem;
         }
 
-        /* Dashboard Container */
         .dashboard-container {
             display: flex;
             gap: 30px;
@@ -138,7 +135,6 @@
             flex: 1;
         }
 
-        /* Sidebar Nav */
         .sidebar {
             width: 280px;
             background: var(--panel-bg);
@@ -192,7 +188,6 @@
             gap: 10px;
         }
 
-        /* Main Content Section */
         .main-content {
             flex: 1;
             background: var(--panel-bg);
@@ -243,7 +238,6 @@
             background: var(--accent-glow);
         }
 
-        /* Commands Card */
         .command-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -301,7 +295,6 @@
             border-color: var(--danger);
         }
 
-        /* Placeholder style for other tabs */
         .tab-placeholder {
             text-align: center;
             padding: 50px 20px;
@@ -313,25 +306,15 @@
             margin-bottom: 15px;
         }
 
-        /* Modal Form */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
         }
 
-        .modal-content {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 30px;
-            border-radius: 16px;
-            width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .full-width {
+            grid-column: span 2;
         }
 
         .form-group {
@@ -355,6 +338,26 @@
             outline: none;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 16px;
+            width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
         .modal-footer {
             display: flex;
             justify-content: flex-end;
@@ -374,11 +377,10 @@
 </head>
 <body>
 
-    <!-- Header Navigation -->
     <header>
         <div class="logo-container">
             <i class="fa-solid fa-robot"></i>
-            <span>OPs Bot</span>
+            <span>OPs Bot Dashboard</span>
         </div>
         <nav>
             <a href="#" class="active">Home</a>
@@ -387,7 +389,6 @@
         <a href="#" class="btn-add-discord"><i class="fa-brands fa-discord"></i> Add to Discord</a>
     </header>
 
-    <!-- Hero Banner -->
     <div class="hero-banner">
         <div class="hero-icon">
             <i class="fa-solid fa-sliders"></i>
@@ -398,19 +399,16 @@
         </div>
     </div>
 
-    <!-- Main Container -->
     <div class="dashboard-container">
-        
-        <!-- Sidebar Navigation -->
         <div class="sidebar">
             <button class="sidebar-btn active" onclick="switchTab(event, 'commands-tab')">
                 <i class="fa-solid fa-terminal"></i> Custom Commands
             </button>
+            <button class="sidebar-btn" onclick="switchTab(event, 'tickets-tab')">
+                <i class="fa-solid fa-ticket"></i> Ticket System Panel
+            </button>
             <button class="sidebar-btn" onclick="switchTab(event, 'moderation-tab')">
                 <i class="fa-solid fa-shield-halved"></i> Moderation Settings
-            </button>
-            <button class="sidebar-btn" onclick="switchTab(event, 'tickets-tab')">
-                <i class="fa-solid fa-ticket"></i> Ticket System
             </button>
             <button class="sidebar-btn" onclick="switchTab(event, 'leveling-tab')">
                 <i class="fa-solid fa-star"></i> Leveling & XP
@@ -420,12 +418,11 @@
                 <i class="fa-solid fa-lock" style="color: var(--accent-blue); font-size: 1.2rem;"></i>
                 <div>
                     <strong>Administrator Role Required</strong>
-                    <p>Only users with Admin permissions can edit commands.</p>
+                    <p>Only authorized users can modify server configs.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Content Area -->
         <div class="main-content">
             
             <!-- Tab 1: Custom Commands -->
@@ -434,23 +431,53 @@
                     <h2><i class="fa-solid fa-code" style="color: var(--accent-blue);"></i> Custom Commands</h2>
                     <button class="btn-create" onclick="openModal()"><i class="fa-solid fa-plus"></i> Add New Command</button>
                 </div>
+                <div id="commands-list"></div>
+            </div>
 
-                <div id="commands-list">
-                    <div class="command-card">
-                        <div class="command-info">
-                            <h4>!rules</h4>
-                            <p><strong>Response:</strong> Please follow the server rules and respect all members!</p>
-                            <span class="role-badge"><i class="fa-solid fa-user-shield"></i> Allowed Roles: Everyone</span>
+            <!-- Tab 2: Ticket Settings -->
+            <div id="tickets-tab" class="tab-section">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-ticket" style="color: var(--accent-blue);"></i> Ticket Panel Customizer</h2>
+                    <button class="btn-create" onclick="saveAndSendTicketPanel()" style="background: var(--btn-discord);">
+                        <i class="fa-brands fa-discord"></i> Save & Publish Panel
+                    </button>
+                </div>
+                <div class="command-card" style="display: block;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Panel Title</label>
+                            <input type="text" id="ticketTitle" placeholder="**الدعم الفني**">
                         </div>
-                        <div class="action-btns">
-                            <button class="btn-action"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn-action btn-delete" onclick="this.closest('.command-card').remove()"><i class="fa-solid fa-trash"></i></button>
+                        <div class="form-group">
+                            <label>Button Color</label>
+                            <select id="ticketBtnColor">
+                                <option value="Primary">Blue (Primary)</option>
+                                <option value="Success">Green (Success)</option>
+                                <option value="Danger">Red (Danger)</option>
+                                <option value="Secondary">Grey (Secondary)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Button Text Label</label>
+                            <input type="text" id="ticketBtnLabel" placeholder="Create Ticket">
+                        </div>
+                        <div class="form-group">
+                            <label>Channel ID to Send Panel</label>
+                            <input type="text" id="ticketChannelId" placeholder="1551238208216506559">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Banner Image URL</label>
+                            <input type="text" id="ticketImageUrl" placeholder="https://media.discordapp.net/...">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Panel Description Message</label>
+                            <textarea id="ticketDesc" rows="5"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 2: Moderation -->
+            <!-- Tab 3: Moderation -->
             <div id="moderation-tab" class="tab-section">
                 <div class="section-header">
                     <h2><i class="fa-solid fa-shield-halved" style="color: var(--accent-blue);"></i> Moderation Settings</h2>
@@ -458,19 +485,7 @@
                 <div class="tab-placeholder">
                     <i class="fa-solid fa-gears"></i>
                     <h3>Moderation Configuration</h3>
-                    <p>Configure auto-mod rules, punishments, and security settings here soon.</p>
-                </div>
-            </div>
-
-            <!-- Tab 3: Tickets -->
-            <div id="tickets-tab" class="tab-section">
-                <div class="section-header">
-                    <h2><i class="fa-solid fa-ticket" style="color: var(--accent-blue);"></i> Ticket System</h2>
-                </div>
-                <div class="tab-placeholder">
-                    <i class="fa-solid fa-headset"></i>
-                    <h3>Support Tickets Panel</h3>
-                    <p>Manage support categories and staff permissions for tickets.</p>
+                    <p>All moderation features (!بان, !كيك, !سجن) are active in code.</p>
                 </div>
             </div>
 
@@ -482,12 +497,11 @@
                 <div class="tab-placeholder">
                     <i class="fa-solid fa-chart-line"></i>
                     <h3>XP and Ranks Configuration</h3>
-                    <p>Customize message XP gains, level-up notifications, and reward roles.</p>
+                    <p>Track experience and top staff levels directly from Discord commands.</p>
                 </div>
             </div>
 
         </div>
-
     </div>
 
     <!-- Modal Form -->
@@ -496,7 +510,7 @@
             <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-plus-circle" style="color: var(--accent-blue);"></i> Add Custom Command</h3>
             
             <div class="form-group">
-                <label>Command Trigger (e.g., !ip, !store)</label>
+                <label>Command Trigger (e.g., !ip, !rules)</label>
                 <input type="text" id="cmdTrigger" placeholder="!mycommand">
             </div>
 
@@ -506,12 +520,10 @@
             </div>
 
             <div class="form-group">
-                <label>Required Role / Access Level</label>
+                <label>Required Permission Level</label>
                 <select id="cmdRole">
                     <option value="everyone">Everyone</option>
                     <option value="admin">Administrators Only</option>
-                    <option value="moderator">Moderators</option>
-                    <option value="vip">VIP Members</option>
                 </select>
             </div>
 
@@ -526,24 +538,16 @@
         <p>© 2026 OPs Bot Dashboard. All Rights Reserved.</p>
     </footer>
 
-    <!-- Interactive JavaScript -->
     <script>
-        // Tab Switching Logic
+        const API_URL = "http://localhost:3000/api";
+
         function switchTab(event, tabId) {
-            // Remove active class from all buttons
-            const buttons = document.querySelectorAll('.sidebar-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            // Hide all tab sections
-            const sections = document.querySelectorAll('.tab-section');
-            sections.forEach(sec => sec.classList.remove('active-tab'));
-
-            // Add active to clicked button and target section
+            document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active-tab'));
             event.currentTarget.classList.add('active');
             document.getElementById(tabId).classList.add('active-tab');
         }
 
-        // Modal Functions
         function openModal() {
             document.getElementById('commandModal').style.display = 'flex';
         }
@@ -552,37 +556,108 @@
             document.getElementById('commandModal').style.display = 'none';
         }
 
-        function addCommand() {
+        async function fetchCommands() {
+            try {
+                const res = await fetch(`${API_URL}/commands`);
+                const commands = await res.json();
+                const list = document.getElementById('commands-list');
+                list.innerHTML = '';
+                
+                if (commands.length === 0) {
+                    list.innerHTML = '<p style="color: var(--text-muted);">No custom commands added yet.</p>';
+                    return;
+                }
+
+                commands.forEach(cmd => {
+                    list.innerHTML += `
+                        <div class="command-card">
+                            <div class="command-info">
+                                <h4>${cmd.trigger}</h4>
+                                <p><strong>Response:</strong> ${cmd.response}</p>
+                                <span class="role-badge"><i class="fa-solid fa-user-shield"></i> Permission: ${cmd.role}</span>
+                            </div>
+                            <div class="action-btns">
+                                <button class="btn-action btn-delete" onclick="deleteCommand('${cmd.trigger}')"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                console.error("Error fetching commands:", err);
+            }
+        }
+
+        async function addCommand() {
             const trigger = document.getElementById('cmdTrigger').value;
             const response = document.getElementById('cmdResponse').value;
-            const role = document.getElementById('cmdRole').options[document.getElementById('cmdRole').selectedIndex].text;
+            const role = document.getElementById('cmdRole').value;
 
             if(!trigger || !response) {
                 alert('Please fill in all required fields!');
                 return;
             }
 
-            const commandList = document.getElementById('commands-list');
-            const newCard = document.createElement('div');
-            newCard.className = 'command-card';
-            newCard.innerHTML = `
-                <div class="command-info">
-                    <h4>${trigger}</h4>
-                    <p><strong>Response:</strong> ${response}</p>
-                    <span class="role-badge"><i class="fa-solid fa-user-shield"></i> Allowed Roles: ${role}</span>
-                </div>
-                <div class="action-btns">
-                    <button class="btn-action"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-action btn-delete" onclick="this.closest('.command-card').remove()"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            `;
+            await fetch(`${API_URL}/commands`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ trigger, response, role })
+            });
 
-            commandList.appendChild(newCard);
-            
             document.getElementById('cmdTrigger').value = '';
             document.getElementById('cmdResponse').value = '';
             closeModal();
+            fetchCommands();
         }
+
+        async function deleteCommand(trigger) {
+            await fetch(`${API_URL}/commands/${encodeURIComponent(trigger)}`, { method: 'DELETE' });
+            fetchCommands();
+        }
+
+        async function loadTicketSettings() {
+            try {
+                const res = await fetch(`${API_URL}/ticket-settings`);
+                const config = await res.json();
+                
+                document.getElementById('ticketTitle').value = config.title;
+                document.getElementById('ticketDesc').value = config.description;
+                document.getElementById('ticketImageUrl').value = config.imageUrl;
+                document.getElementById('ticketBtnLabel').value = config.buttonLabel;
+                document.getElementById('ticketBtnColor').value = config.buttonColor;
+                document.getElementById('ticketChannelId').value = config.channelId;
+            } catch (err) {
+                console.error("Error loading ticket settings:", err);
+            }
+        }
+
+        async function saveAndSendTicketPanel() {
+            const newConfig = {
+                title: document.getElementById('ticketTitle').value,
+                description: document.getElementById('ticketDesc').value,
+                imageUrl: document.getElementById('ticketImageUrl').value,
+                buttonLabel: document.getElementById('ticketBtnLabel').value,
+                buttonColor: document.getElementById('ticketBtnColor').value,
+                channelId: document.getElementById('ticketChannelId').value
+            };
+
+            const res = await fetch(`${API_URL}/ticket-settings`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newConfig)
+            });
+
+            const data = await res.json();
+            if(data.success) {
+                alert("تم تحديث البانل وإرساله لسيرفر الديسكورد بنجاح!");
+            } else {
+                alert("حدث خطأ أثناء تحديث البانل");
+            }
+        }
+
+        window.onload = () => {
+            fetchCommands();
+            loadTicketSettings();
+        };
     </script>
 </body>
 </html>
