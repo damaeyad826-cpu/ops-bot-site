@@ -1,92 +1,171 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secured Discord Dashboard</title>
+    <title>OPs Bot Dashboard</title>
     <style>
-        :root { --bg-dark: #0f111a; --bg-panel: #161925; --primary: #3d5afe; --text-main: #ffffff; --text-muted: #a0a4b8; --border: #2a2d3e; --danger: #ff4d4d; --success: #00e676; }
+        :root { 
+            --bg-body: #0b0e14; 
+            --bg-nav: #0f131c; 
+            --bg-panel: #131722; 
+            --border-color: #1f2638;
+            --primary: #3b59ff; 
+            --primary-hover: #324be6;
+            --text-main: #ffffff; 
+            --text-muted: #8a93a8; 
+            --danger: #ff4d4d; 
+            --success: #00e676; 
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; }
-        .sidebar { width: 260px; background-color: var(--bg-panel); border-right: 1px solid var(--border); padding: 20px 0; display: flex; flex-direction: column; }
-        .sidebar-header { padding: 0 20px 20px; font-size: 1.2rem; font-weight: bold; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
-        .nav-item { padding: 15px 20px; color: var(--text-muted); cursor: pointer; transition: all 0.3s; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
-        .nav-item:hover, .nav-item.active { background-color: rgba(61, 90, 254, 0.1); color: var(--primary); border-left: 3px solid var(--primary); }
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        section { display: none; background: var(--bg-panel); padding: 30px; border-radius: 10px; border: 1px solid var(--border); }
+        body { background-color: var(--bg-body); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+        /* Navbar العلوي المطابق للصورة */
+        .navbar { height: 70px; background-color: var(--bg-nav); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
+        .nav-brand { display: flex; align-items: center; gap: 12px; font-weight: bold; font-size: 1.2rem; color: #fff; }
+        .nav-brand img { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; }
+        .nav-links { display: flex; align-items: center; gap: 25px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; transition: 0.3s; cursor: pointer; }
+        .nav-links a:hover, .nav-links a.active { color: #fff; }
+        .btn-discord { background-color: var(--primary); color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .btn-discord:hover { background-color: var(--primary-hover); }
+
+        /* هيكل الصفحة الرئيسي */
+        .dashboard-container { display: flex; flex: 1; height: calc(100vh - 70px); }
+        
+        /* الشريط الجانبي */
+        .sidebar { width: 280px; background-color: var(--bg-panel); border-right: 1px solid var(--border-color); padding: 25px 0; display: flex; flex-direction: column; gap: 5px; }
+        .sidebar-item { padding: 14px 25px; color: var(--text-muted); cursor: pointer; transition: all 0.3s; font-size: 0.95rem; display: flex; align-items: center; gap: 12px; border-left: 3px solid transparent; }
+        .sidebar-item:hover, .sidebar-item.active { background-color: rgba(59, 89, 255, 0.1); color: var(--primary); border-left-color: var(--primary); }
+
+        /* المحتوى */
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; background-color: var(--bg-body); }
+        section { display: none; background: var(--bg-panel); padding: 35px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
         section.active { display: block; }
-        h2 { margin-bottom: 25px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; }
-        input, select, textarea { width: 100%; padding: 12px; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); border-radius: 6px; font-size: 1rem; }
+        
+        h2 { margin-bottom: 25px; color: var(--text-main); font-size: 1.4rem; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        .form-group { margin-bottom: 22px; }
+        label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+        input, select, textarea { width: 100%; padding: 12px 15px; background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; font-size: 0.95rem; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
-        textarea { resize: vertical; min-height: 100px; }
-        .btn { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: 0.3s; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        textarea { resize: vertical; min-height: 110px; }
+        
+        .btn { padding: 12px 22px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95rem; font-weight: bold; transition: 0.3s; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-primary { background-color: var(--primary); }
-        .btn-primary:hover { background-color: #324ee3; }
-        .btn-success { background-color: var(--success); color: #000;}
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-success { background-color: var(--success); color: #000; }
         .btn-success:hover { background-color: #00c853; }
-        .btn-danger { background-color: var(--danger); padding: 8px 12px; font-size: 0.85rem; }
-        .data-list { list-style: none; margin-top: 20px; }
-        .data-list li { background: var(--bg-dark); border: 1px solid var(--border); padding: 15px; margin-bottom: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .badge { background: rgba(61, 90, 254, 0.2); color: #8c9eff; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 10px; }
+        .btn-danger { background-color: var(--danger); padding: 8px 14px; font-size: 0.85rem; }
+        
+        .data-list { list-style: none; margin-top: 25px; }
+        .data-list li { background: var(--bg-body); border: 1px solid var(--border-color); padding: 16px 20px; margin-bottom: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .badge { background: rgba(59, 89, 255, 0.15); color: #8da4ff; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; margin-left: 10px; font-weight: 600; }
+
+        /* تنسيق صفحة Terms of Service */
+        .tos-box h3 { color: #fff; margin-top: 20px; margin-bottom: 10px; }
+        .tos-box p, .tos-box li { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; margin-bottom: 10px; }
+        .tos-box ul { padding-left: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="sidebar-header">⚙️ Bot Dashboard<br><small style="color:var(--success);font-size:12px;">Logged in securely</small></div>
-        <div class="nav-item active" onclick="switchTab('commands')">💬 Custom Commands</div>
-        <div class="nav-item" onclick="switchTab('tickets')">🎫 Ticket System Panel</div>
-        <div class="nav-item" onclick="switchTab('moderation')">🛡️ Moderation Settings</div>
+    <!-- Navbar المطابق للصورة -->
+    <div class="navbar">
+        <div class="nav-brand">
+            <div style="font-size:20px;">🛡️</div> OPs Bot Dashboard
+        </div>
+        <div class="nav-links">
+            <a onclick="switchTab('commands')">Home</a>
+            <a onclick="switchTab('tos')">Terms of Service</a>
+            <a href="https://discord.com" target="_blank" class="btn-discord">Add to Discord</a>
+        </div>
     </div>
 
-    <div class="main-content">
-        <!-- 1. Custom Commands Section -->
-        <section id="commands" class="active">
-            <h2>Custom Commands (No Prefix)</h2>
-            <div class="form-group"><label>Command Trigger (الكلمة الأولى)</label><input type="text" id="cmd-trigger" placeholder="مثال: السلام"></div>
-            <div class="form-group"><label>Bot Response (رد البوت)</label><textarea id="cmd-response" placeholder="مثال: وعليكم السلام"></textarea></div>
-            <div class="form-group">
-                <label>Select Required Role (الرتبة المسموح لها - اختياري)</label>
-                <select id="cmd-role">
-                    <option value="">✅ مسموح للجميع (Public)</option>
-                </select>
-            </div>
-            <button class="btn btn-primary" onclick="addCommand()">Add Command</button>
-            <ul id="commands-list" class="data-list"></ul>
-        </section>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-item active" onclick="switchTab('commands')">💬 Custom Commands</div>
+            <div class="sidebar-item" onclick="switchTab('tickets')">🎫 Ticket System</div>
+            <div class="sidebar-item" onclick="switchTab('moderation')">🛡️ Moderation Settings</div>
+            <div class="sidebar-item" onclick="switchTab('tos')">📜 Terms of Service</div>
+        </div>
 
-        <!-- 2. Ticket System Section -->
-        <section id="tickets">
-            <h2>Ticket System Panel & Transcripts</h2>
-            <div class="form-group"><label>Panel Title (عنوان الرسالة)</label><input type="text" id="ticket-title" placeholder="الدعم الفني"></div>
-            <div class="form-group"><label>Description (الوصف)</label><textarea id="ticket-desc"></textarea></div>
-            <div class="form-group"><label>Button Text (نص الزر)</label><input type="text" id="ticket-btn"></div>
-            <div class="form-group"><label>Channel ID (روم لوحة التذاكر)</label><input type="text" id="ticket-channel" placeholder="أيدي الروم الذي سيظهر فيه زر التذكرة"></div>
-            
-            <div class="form-group">
-                <label style="color: var(--success);">Transcript Channel ID (روم حفظ السجلات بعد الإغلاق)</label>
-                <input type="text" id="transcript-channel" placeholder="ضع أيدي الروم الذي سيُرسل إليه ملف المحادثة">
-            </div>
-            
-            <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <button class="btn btn-primary" onclick="saveTicketSettings()">💾 Save Settings</button>
-                <button class="btn btn-success" onclick="sendTicketPanel()">🚀 Send Panel to Discord</button>
-            </div>
-        </section>
+        <div class="main-content">
+            <!-- 1. Custom Commands Section -->
+            <section id="commands" class="active">
+                <h2>Custom Commands (No Prefix)</h2>
+                <div class="form-group"><label>Command Trigger (الكلمة الأولى)</label><input type="text" id="cmd-trigger" placeholder="مثال: السلام"></div>
+                <div class="form-group"><label>Bot Response (رد البوت)</label><textarea id="cmd-response" placeholder="مثال: وعليكم السلام"></textarea></div>
+                <div class="form-group">
+                    <label>Select Required Role (الرتبة المسموح لها)</label>
+                    <select id="cmd-role">
+                        <option value="">✅ مسموح للجميع (Public)</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="addCommand()">Add Command</button>
+                <ul id="commands-list" class="data-list"></ul>
+            </section>
 
-        <!-- 3. Moderation Settings Section -->
-        <section id="moderation">
-            <h2>Moderation Settings (No Prefix)</h2>
-            <div class="form-group">
-                <label>Action</label>
-                <select id="mod-action"><option value="ban">Ban (حظر)</option><option value="kick">Kick (طرد)</option><option value="mute">Mute (تايم أوت)</option></select>
-            </div>
-            <div class="form-group"><label>Custom Trigger (الكلمة المفتاحية)</label><input type="text" id="mod-trigger" placeholder="مثال: بان"></div>
-            <button class="btn btn-primary" onclick="addModAlias()">Add Alias</button>
-            <ul id="mod-list" class="data-list"></ul>
-        </section>
+            <!-- 2. Ticket System Section -->
+            <section id="tickets">
+                <h2>Ticket System Panel & Transcripts</h2>
+                <div class="form-group"><label>Panel Title (عنوان الرسالة)</label><input type="text" id="ticket-title" placeholder="الدعم الفني"></div>
+                <div class="form-group"><label>Description (الوصف)</label><textarea id="ticket-desc"></textarea></div>
+                <div class="form-group"><label>Button Text (نص الزر)</label><input type="text" id="ticket-btn"></div>
+                <div class="form-group"><label>Channel ID (روم لوحة التذاكر)</label><input type="text" id="ticket-channel" placeholder="أيدي الروم الذي سيظهر فيه زر التذكرة"></div>
+                <div class="form-group">
+                    <label style="color: var(--success);">Transcript Channel ID (روم حفظ السجلات بعد الإغلاق)</label>
+                    <input type="text" id="transcript-channel" placeholder="ضع أيدي الروم الذي سيُرسل إليه ملف المحادثة">
+                </div>
+                <div style="display: flex; gap: 15px; margin-top: 25px;">
+                    <button class="btn btn-primary" onclick="saveTicketSettings()">💾 Save Settings</button>
+                    <button class="btn btn-success" onclick="sendTicketPanel()">🚀 Send Panel to Discord</button>
+                </div>
+            </section>
+
+            <!-- 3. Moderation Settings Section -->
+            <section id="moderation">
+                <h2>Moderation Settings (No Prefix)</h2>
+                <div class="form-group">
+                    <label>Action (الإجراء)</label>
+                    <select id="mod-action">
+                        <option value="ban">Ban (حظر)</option>
+                        <option value="kick">Kick (طرد)</option>
+                        <option value="mute">Mute (تايم أوت)</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Custom Trigger (الكلمة المفتاحية)</label><input type="text" id="mod-trigger" placeholder="مثال: بان"></div>
+                <div class="form-group">
+                    <label>Select Required Role (الرتبة المسموح لها باستعمال أمر الإشراف)</label>
+                    <select id="mod-role">
+                        <option value="">🔒 يتطلب صلاحية الآدمن فقط (Administrator)</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="addModAlias()">Add Alias</button>
+                <ul id="mod-list" class="data-list"></ul>
+            </section>
+
+            <!-- 4. Terms of Service Section -->
+            <section id="tos" class="tos-box">
+                <h2>Terms of Service</h2>
+                <p>Last Updated: September 22, 2026</p>
+                
+                <h3>1. Acceptance of Terms</h3>
+                <p>By inviting OPs Bot to your Discord server or using this dashboard, you agree to comply with and be bound by these Terms of Service.</p>
+                
+                <h3>2. Bot Usage & Guidelines</h3>
+                <ul>
+                    <li>You agree not to use OPs Bot for spamming, harassment, or any malicious activities on Discord.</li>
+                    <li>The bot must be used in accordance with Discord's Terms of Service and Community Guidelines.</li>
+                </ul>
+
+                <h3>3. Data & Privacy</h3>
+                <p>We collect essential configuration data (such as server settings, custom commands, and ticket logs) solely to provide the bot's features. We do not sell or share your data with third parties.</p>
+
+                <h3>4. Limitation of Liability</h3>
+                <p>The bot developers are not responsible for any misuse of the bot's moderation features or accidental data loss within your Discord server.</p>
+            </section>
+        </div>
     </div>
 
     <script>
@@ -94,17 +173,24 @@
 
         function switchTab(tabId) {
             document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(nav => nav.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            
+            // تفعيل الزر المناسب في القائمة الجانبية إن وجد
+            const targetSidebar = Array.from(document.querySelectorAll('.sidebar-item')).find(el => el.getAttribute('onclick').includes(tabId));
+            if (targetSidebar) targetSidebar.classList.add('active');
         }
 
         async function fetchRoles() {
             const res = await fetch(`${API_URL}/roles`);
             const roles = await res.json();
-            const select = document.getElementById('cmd-role');
+            const cmdRoleSelect = document.getElementById('cmd-role');
+            const modRoleSelect = document.getElementById('mod-role');
+            
             roles.forEach(role => {
-                select.innerHTML += `<option value="${role.id}">${role.name}</option>`;
+                const optionHTML = `<option value="${role.id}">${role.name}</option>`;
+                cmdRoleSelect.innerHTML += optionHTML;
+                modRoleSelect.innerHTML += optionHTML;
             });
         }
 
@@ -114,7 +200,7 @@
             const list = document.getElementById('commands-list');
             list.innerHTML = '';
             cmds.forEach(cmd => {
-                const roleText = cmd.role ? `<span class="badge">Role ID: ${cmd.role}</span>` : `<span class="badge" style="background:#2a2d3e;color:#a0a4b8">Public</span>`;
+                const roleText = cmd.role ? `<span class="badge">Role ID: ${cmd.role}</span>` : `<span class="badge" style="background:#1f2638;color:#8a93a8">Public</span>`;
                 list.innerHTML += `<li><div><strong>${cmd.trigger}</strong> ➡️ ${cmd.response} ${roleText}</div><button class="btn btn-danger" onclick="deleteCommand(${cmd.id})">Delete</button></li>`;
             });
         }
@@ -170,20 +256,29 @@
             const list = document.getElementById('mod-list');
             list.innerHTML = '';
             aliases.forEach(alias => {
-                const c = alias.action === 'ban' ? '#ff4d4d' : alias.action === 'kick' ? '#ff9800' : '#3d5afe';
-                list.innerHTML += `<li><div><strong>${alias.trigger}</strong> ➡️ <span style="color:${c}; font-weight:bold;">${alias.action.toUpperCase()}</span></div><button class="btn btn-danger" onclick="deleteModAlias(${alias.id})">Delete</button></li>`;
+                const c = alias.action === 'ban' ? '#ff4d4d' : alias.action === 'kick' ? '#ff9800' : '#3b59ff';
+                const roleText = alias.role ? `<span class="badge">Role ID: ${alias.role}</span>` : `<span class="badge" style="background:#1f2638;color:#8a93a8">Admin Only</span>`;
+                list.innerHTML += `<li><div><strong>${alias.trigger}</strong> ➡️ <span style="color:${c}; font-weight:bold;">${alias.action.toUpperCase()}</span> ${roleText}</div><button class="btn btn-danger" onclick="deleteModAlias(${alias.id})">Delete</button></li>`;
             });
         }
+
         async function addModAlias() {
-            const action = document.getElementById('mod-action').value, trigger = document.getElementById('mod-trigger').value;
-            if (!trigger) return alert("اكتب الكلمة!");
-            await fetch(`${API_URL}/mod-aliases`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, trigger }) });
+            const action = document.getElementById('mod-action').value;
+            const trigger = document.getElementById('mod-trigger').value;
+            const role = document.getElementById('mod-role').value;
+            if (!trigger) return alert("اكتب الكلمة المفتاحية!");
+            await fetch(`${API_URL}/mod-aliases`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, trigger, role }) });
             document.getElementById('mod-trigger').value = '';
+            document.getElementById('mod-role').value = '';
             fetchModAliases();
         }
+
         async function deleteModAlias(id) { await fetch(`${API_URL}/mod-aliases/${id}`, { method: 'DELETE' }); fetchModAliases(); }
 
         window.onload = () => { fetchRoles(); fetchCommands(); fetchTicketSettings(); fetchModAliases(); };
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
