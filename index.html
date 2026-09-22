@@ -1,663 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPs Bot - Dashboard</title>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Secured Discord Dashboard</title>
     <style>
-        :root {
-            --bg-dark: #080b13;
-            --panel-bg: rgba(14, 20, 37, 0.85);
-            --card-bg: #0d1326;
-            --accent-blue: #3b82f6;
-            --accent-glow: #1d4ed8;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border-color: #1e293b;
-            --btn-discord: #5865f2;
-            --danger: #ef4444;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(29, 78, 216, 0.15) 0%, transparent 40%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 50px;
-            background: rgba(8, 11, 19, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .logo-container i {
-            color: var(--accent-blue);
-            font-size: 1.8rem;
-        }
-
-        nav {
-            display: flex;
-            gap: 25px;
-        }
-
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--text-main);
-        }
-
-        .btn-add-discord {
-            background-color: var(--btn-discord);
-            color: white;
-            padding: 9px 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-        }
-
-        .btn-add-discord:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .hero-banner {
-            padding: 40px 50px;
-            background: radial-gradient(ellipse at top, rgba(29, 78, 216, 0.25) 0%, transparent 70%);
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .hero-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-glow));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
-        }
-
-        .hero-title h1 {
-            font-size: 2.2rem;
-            margin-bottom: 5px;
-        }
-
-        .hero-title p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .dashboard-container {
-            display: flex;
-            gap: 30px;
-            max-width: 1300px;
-            margin: 40px auto;
-            width: 90%;
-            flex: 1;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            height: fit-content;
-        }
-
-        .sidebar-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: var(--text-muted);
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: 500;
-            transition: 0.3s;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            width: 100%;
-            text-align: left;
-            font-size: 0.95rem;
-        }
-
-        .sidebar-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-main);
-        }
-
-        .sidebar-btn.active {
-            background: var(--accent-glow);
-            color: white;
-            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4);
-        }
-
-        .admin-badge-box {
-            margin-top: 20px;
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px dashed var(--accent-blue);
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 10px;
-        }
-
-        .main-content {
-            flex: 1;
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px;
-        }
-
-        .tab-section {
-            display: none;
-        }
-
-        .tab-section.active-tab {
-            display: block;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-
-        .section-header h2 {
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-create {
-            background: var(--accent-blue);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-        }
-
-        .btn-create:hover {
-            background: var(--accent-glow);
-        }
-
-        .command-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .command-info h4 {
-            font-size: 1.1rem;
-            color: var(--accent-blue);
-            margin-bottom: 5px;
-        }
-
-        .command-info p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .role-badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.78rem;
-            margin-top: 8px;
-            color: var(--text-main);
-        }
-
-        .action-btns {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-action {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-action:hover {
-            color: white;
-            border-color: var(--text-muted);
-        }
-
-        .btn-delete:hover {
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .tab-placeholder {
-            text-align: center;
-            padding: 50px 20px;
-            color: var(--text-muted);
-        }
-        .tab-placeholder i {
-            font-size: 3rem;
-            color: var(--accent-blue);
-            margin-bottom: 15px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            width: 100%;
-        }
-
-        .full-width {
-            grid-column: span 2;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            padding: 10px;
-            background: var(--bg-dark);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: white;
-            outline: none;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 30px;
-            border-radius: 16px;
-            width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-            font-size: 0.85rem;
-            margin-top: 40px;
-        }
+        :root { --bg-dark: #0f111a; --bg-panel: #161925; --primary: #3d5afe; --text-main: #ffffff; --text-muted: #a0a4b8; --border: #2a2d3e; --danger: #ff4d4d; --success: #00e676; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; }
+        .sidebar { width: 260px; background-color: var(--bg-panel); border-right: 1px solid var(--border); padding: 20px 0; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 0 20px 20px; font-size: 1.2rem; font-weight: bold; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
+        .nav-item { padding: 15px 20px; color: var(--text-muted); cursor: pointer; transition: all 0.3s; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+        .nav-item:hover, .nav-item.active { background-color: rgba(61, 90, 254, 0.1); color: var(--primary); border-left: 3px solid var(--primary); }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        section { display: none; background: var(--bg-panel); padding: 30px; border-radius: 10px; border: 1px solid var(--border); }
+        section.active { display: block; }
+        h2 { margin-bottom: 25px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; }
+        input, select, textarea { width: 100%; padding: 12px; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); border-radius: 6px; font-size: 1rem; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+        textarea { resize: vertical; min-height: 100px; }
+        .btn { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: 0.3s; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary { background-color: var(--primary); }
+        .btn-primary:hover { background-color: #324ee3; }
+        .btn-success { background-color: var(--success); color: #000;}
+        .btn-success:hover { background-color: #00c853; }
+        .btn-danger { background-color: var(--danger); padding: 8px 12px; font-size: 0.85rem; }
+        .data-list { list-style: none; margin-top: 20px; }
+        .data-list li { background: var(--bg-dark); border: 1px solid var(--border); padding: 15px; margin-bottom: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .badge { background: rgba(61, 90, 254, 0.2); color: #8c9eff; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 10px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <i class="fa-solid fa-robot"></i>
-            <span>OPs Bot Dashboard</span>
-        </div>
-        <nav>
-            <a href="#" class="active">Home</a>
-            <a href="#">Dashboard</a>
-        </nav>
-        <a href="#" class="btn-add-discord"><i class="fa-brands fa-discord"></i> Add to Discord</a>
-    </header>
-
-    <div class="hero-banner">
-        <div class="hero-icon">
-            <i class="fa-solid fa-sliders"></i>
-        </div>
-        <div class="hero-title">
-            <h1>Control Panel & Custom Commands</h1>
-            <p>Manage your custom responses, permissions, and server settings effortlessly.</p>
-        </div>
+    <div class="sidebar">
+        <div class="sidebar-header">⚙️ Bot Dashboard<br><small style="color:var(--success);font-size:12px;">Logged in securely</small></div>
+        <div class="nav-item active" onclick="switchTab('commands')">💬 Custom Commands</div>
+        <div class="nav-item" onclick="switchTab('tickets')">🎫 Ticket System Panel</div>
+        <div class="nav-item" onclick="switchTab('moderation')">🛡️ Moderation Settings</div>
     </div>
 
-    <div class="dashboard-container">
-        <div class="sidebar">
-            <button class="sidebar-btn active" onclick="switchTab(event, 'commands-tab')">
-                <i class="fa-solid fa-terminal"></i> Custom Commands
-            </button>
-            <button class="sidebar-btn" onclick="switchTab(event, 'tickets-tab')">
-                <i class="fa-solid fa-ticket"></i> Ticket System Panel
-            </button>
-            <button class="sidebar-btn" onclick="switchTab(event, 'moderation-tab')">
-                <i class="fa-solid fa-shield-halved"></i> Moderation Settings
-            </button>
-            <button class="sidebar-btn" onclick="switchTab(event, 'leveling-tab')">
-                <i class="fa-solid fa-star"></i> Leveling & XP
-            </button>
-
-            <div class="admin-badge-box">
-                <i class="fa-solid fa-lock" style="color: var(--accent-blue); font-size: 1.2rem;"></i>
-                <div>
-                    <strong>Administrator Role Required</strong>
-                    <p>Only authorized users can modify server configs.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="main-content">
-            
-            <!-- Tab 1: Custom Commands -->
-            <div id="commands-tab" class="tab-section active-tab">
-                <div class="section-header">
-                    <h2><i class="fa-solid fa-code" style="color: var(--accent-blue);"></i> Custom Commands</h2>
-                    <button class="btn-create" onclick="openModal()"><i class="fa-solid fa-plus"></i> Add New Command</button>
-                </div>
-                <div id="commands-list"></div>
-            </div>
-
-            <!-- Tab 2: Ticket Settings -->
-            <div id="tickets-tab" class="tab-section">
-                <div class="section-header">
-                    <h2><i class="fa-solid fa-ticket" style="color: var(--accent-blue);"></i> Ticket Panel Customizer</h2>
-                    <button class="btn-create" onclick="saveAndSendTicketPanel()" style="background: var(--btn-discord);">
-                        <i class="fa-brands fa-discord"></i> Save & Publish Panel
-                    </button>
-                </div>
-                <div class="command-card" style="display: block;">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Panel Title</label>
-                            <input type="text" id="ticketTitle" placeholder="**الدعم الفني**">
-                        </div>
-                        <div class="form-group">
-                            <label>Button Color</label>
-                            <select id="ticketBtnColor">
-                                <option value="Primary">Blue (Primary)</option>
-                                <option value="Success">Green (Success)</option>
-                                <option value="Danger">Red (Danger)</option>
-                                <option value="Secondary">Grey (Secondary)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Button Text Label</label>
-                            <input type="text" id="ticketBtnLabel" placeholder="Create Ticket">
-                        </div>
-                        <div class="form-group">
-                            <label>Channel ID to Send Panel</label>
-                            <input type="text" id="ticketChannelId" placeholder="1551238208216506559">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Banner Image URL</label>
-                            <input type="text" id="ticketImageUrl" placeholder="https://media.discordapp.net/...">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Panel Description Message</label>
-                            <textarea id="ticketDesc" rows="5"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab 3: Moderation -->
-            <div id="moderation-tab" class="tab-section">
-                <div class="section-header">
-                    <h2><i class="fa-solid fa-shield-halved" style="color: var(--accent-blue);"></i> Moderation Settings</h2>
-                </div>
-                <div class="tab-placeholder">
-                    <i class="fa-solid fa-gears"></i>
-                    <h3>Moderation Configuration</h3>
-                    <p>All moderation features (!بان, !كيك, !سجن) are active in code.</p>
-                </div>
-            </div>
-
-            <!-- Tab 4: Leveling -->
-            <div id="leveling-tab" class="tab-section">
-                <div class="section-header">
-                    <h2><i class="fa-solid fa-star" style="color: var(--accent-blue);"></i> Leveling & XP</h2>
-                </div>
-                <div class="tab-placeholder">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <h3>XP and Ranks Configuration</h3>
-                    <p>Track experience and top staff levels directly from Discord commands.</p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Modal Form -->
-    <div class="modal" id="commandModal">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-plus-circle" style="color: var(--accent-blue);"></i> Add Custom Command</h3>
-            
+    <div class="main-content">
+        <!-- 1. Custom Commands Section -->
+        <section id="commands" class="active">
+            <h2>Custom Commands (No Prefix)</h2>
+            <div class="form-group"><label>Command Trigger (الكلمة الأولى)</label><input type="text" id="cmd-trigger" placeholder="مثال: السلام"></div>
+            <div class="form-group"><label>Bot Response (رد البوت)</label><textarea id="cmd-response" placeholder="مثال: وعليكم السلام"></textarea></div>
             <div class="form-group">
-                <label>Command Trigger (e.g., !ip, !rules)</label>
-                <input type="text" id="cmdTrigger" placeholder="!mycommand">
-            </div>
-
-            <div class="form-group">
-                <label>Bot Response</label>
-                <textarea id="cmdResponse" rows="3" placeholder="Enter what the bot should say..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Required Permission Level</label>
-                <select id="cmdRole">
-                    <option value="everyone">Everyone</option>
-                    <option value="admin">Administrators Only</option>
+                <label>Select Required Role (الرتبة المسموح لها - اختياري)</label>
+                <!-- هذه القائمة ستمتلئ تلقائياً من سيرفر الديسكورد -->
+                <select id="cmd-role">
+                    <option value="">✅ مسموح للجميع (Public)</option>
                 </select>
             </div>
+            <button class="btn btn-primary" onclick="addCommand()">Add Command</button>
+            <ul id="commands-list" class="data-list"></ul>
+        </section>
 
-            <div class="modal-footer">
-                <button class="btn-action" onclick="closeModal()">Cancel</button>
-                <button class="btn-create" onclick="addCommand()">Save Command</button>
+        <!-- 2. Ticket System Section -->
+        <section id="tickets">
+            <h2>Ticket System Panel & Transcripts</h2>
+            <div class="form-group"><label>Panel Title (عنوان الرسالة)</label><input type="text" id="ticket-title" placeholder="الدعم الفني"></div>
+            <div class="form-group"><label>Description (الوصف)</label><textarea id="ticket-desc"></textarea></div>
+            <div class="form-group"><label>Button Text (نص الزر)</label><input type="text" id="ticket-btn"></div>
+            <div class="form-group"><label>Channel ID (روم لوحة التذاكر)</label><input type="text" id="ticket-channel" placeholder="أيدي الروم الذي سيظهر فيه زر التذكرة"></div>
+            
+            <!-- إضافة خاصة بالترانسكربت -->
+            <div class="form-group">
+                <label style="color: var(--success);">Transcript Channel ID (روم حفظ السجلات بعد الإغلاق)</label>
+                <input type="text" id="transcript-channel" placeholder="ضع أيدي الروم الذي سيُرسل إليه ملف المحادثة">
             </div>
-        </div>
-    </div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="saveTicketSettings()">💾 Save Settings</button>
+                <button class="btn btn-success" onclick="sendTicketPanel()">🚀 Send Panel to Discord</button>
+            </div>
+        </section>
 
-    <footer>
-        <p>© 2026 OPs Bot Dashboard. All Rights Reserved.</p>
-    </footer>
+        <!-- 3. Moderation Settings Section -->
+        <section id="moderation">
+            <h2>Moderation Settings (No Prefix)</h2>
+            <div class="form-group">
+                <label>Action</label>
+                <select id="mod-action"><option value="ban">Ban (حظر)</option><option value="kick">Kick (طرد)</option><option value="mute">Mute (تايم أوت)</option></select>
+            </div>
+            <div class="form-group"><label>Custom Trigger (الكلمة المفتاحية)</label><input type="text" id="mod-trigger" placeholder="مثال: بان"></div>
+            <button class="btn btn-primary" onclick="addModAlias()">Add Alias</button>
+            <ul id="mod-list" class="data-list"></ul>
+        </section>
+    </div>
 
     <script>
         const API_URL = "http://localhost:3000/api";
 
-        function switchTab(event, tabId) {
-            document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active-tab'));
+        function switchTab(tabId) {
+            document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active-tab');
         }
 
-        function openModal() {
-            document.getElementById('commandModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('commandModal').style.display = 'none';
+        // جلب الرتب من السيرفر وإضافتها للقائمة المنسدلة
+        async function fetchRoles() {
+            const res = await fetch(`${API_URL}/roles`);
+            const roles = await res.json();
+            const select = document.getElementById('cmd-role');
+            roles.forEach(role => {
+                select.innerHTML += `<option value="${role.id}">${role.name}</option>`;
+            });
         }
 
         async function fetchCommands() {
-            try {
-                const res = await fetch(`${API_URL}/commands`);
-                const commands = await res.json();
-                const list = document.getElementById('commands-list');
-                list.innerHTML = '';
-                
-                if (commands.length === 0) {
-                    list.innerHTML = '<p style="color: var(--text-muted);">No custom commands added yet.</p>';
-                    return;
-                }
-
-                commands.forEach(cmd => {
-                    list.innerHTML += `
-                        <div class="command-card">
-                            <div class="command-info">
-                                <h4>${cmd.trigger}</h4>
-                                <p><strong>Response:</strong> ${cmd.response}</p>
-                                <span class="role-badge"><i class="fa-solid fa-user-shield"></i> Permission: ${cmd.role}</span>
-                            </div>
-                            <div class="action-btns">
-                                <button class="btn-action btn-delete" onclick="deleteCommand('${cmd.trigger}')"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `;
-                });
-            } catch (err) {
-                console.error("Error fetching commands:", err);
-            }
+            const res = await fetch(`${API_URL}/commands`);
+            const cmds = await res.json();
+            const list = document.getElementById('commands-list');
+            list.innerHTML = '';
+            cmds.forEach(cmd => {
+                const roleText = cmd.role ? `<span class="badge">Role ID: ${cmd.role}</span>` : `<span class="badge" style="background:#2a2d3e;color:#a0a4b8">Public</span>`;
+                list.innerHTML += `<li><div><strong>${cmd.trigger}</strong> ➡️ ${cmd.response} ${roleText}</div><button class="btn btn-danger" onclick="deleteCommand(${cmd.id})">Delete</button></li>`;
+            });
         }
 
         async function addCommand() {
-            const trigger = document.getElementById('cmdTrigger').value;
-            const response = document.getElementById('cmdResponse').value;
-            const role = document.getElementById('cmdRole').value;
-
-            if(!trigger || !response) {
-                alert('Please fill in all required fields!');
-                return;
-            }
-
-            await fetch(`${API_URL}/commands`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ trigger, response, role })
-            });
-
-            document.getElementById('cmdTrigger').value = '';
-            document.getElementById('cmdResponse').value = '';
-            closeModal();
+            const trigger = document.getElementById('cmd-trigger').value;
+            const response = document.getElementById('cmd-response').value;
+            const role = document.getElementById('cmd-role').value;
+            if (!trigger || !response) return alert("يرجى ملء الكلمة والرد!");
+            await fetch(`${API_URL}/commands`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ trigger, response, role }) });
+            document.getElementById('cmd-trigger').value = '';
+            document.getElementById('cmd-response').value = '';
+            document.getElementById('cmd-role').value = '';
             fetchCommands();
         }
 
-        async function deleteCommand(trigger) {
-            await fetch(`${API_URL}/commands/${encodeURIComponent(trigger)}`, { method: 'DELETE' });
-            fetchCommands();
-        }
+        async function deleteCommand(id) { await fetch(`${API_URL}/commands/${id}`, { method: 'DELETE' }); fetchCommands(); }
 
-        async function loadTicketSettings() {
-            try {
-                const res = await fetch(`${API_URL}/ticket-settings`);
-                const config = await res.json();
-                
-                document.getElementById('ticketTitle').value = config.title;
-                document.getElementById('ticketDesc').value = config.description;
-                document.getElementById('ticketImageUrl').value = config.imageUrl;
-                document.getElementById('ticketBtnLabel').value = config.buttonLabel;
-                document.getElementById('ticketBtnColor').value = config.buttonColor;
-                document.getElementById('ticketChannelId').value = config.channelId;
-            } catch (err) {
-                console.error("Error loading ticket settings:", err);
-            }
-        }
-
-        async function saveAndSendTicketPanel() {
-            const newConfig = {
-                title: document.getElementById('ticketTitle').value,
-                description: document.getElementById('ticketDesc').value,
-                imageUrl: document.getElementById('ticketImageUrl').value,
-                buttonLabel: document.getElementById('ticketBtnLabel').value,
-                buttonColor: document.getElementById('ticketBtnColor').value,
-                channelId: document.getElementById('ticketChannelId').value
-            };
-
-            const res = await fetch(`${API_URL}/ticket-settings`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newConfig)
-            });
-
+        async function fetchTicketSettings() {
+            const res = await fetch(`${API_URL}/ticket-settings`);
             const data = await res.json();
-            if(data.success) {
-                alert("تم تحديث البانل وإرساله لسيرفر الديسكورد بنجاح!");
-            } else {
-                alert("حدث خطأ أثناء تحديث البانل");
+            if (data) {
+                document.getElementById('ticket-title').value = data.title || '';
+                document.getElementById('ticket-desc').value = data.description || '';
+                document.getElementById('ticket-btn').value = data.buttonText || '';
+                document.getElementById('ticket-channel').value = data.channelId || '';
+                document.getElementById('transcript-channel').value = data.transcriptChannelId || '';
             }
         }
 
-        window.onload = () => {
-            fetchCommands();
-            loadTicketSettings();
-        };
+        async function saveTicketSettings() {
+            const payload = {
+                title: document.getElementById('ticket-title').value,
+                description: document.getElementById('ticket-desc').value,
+                buttonText: document.getElementById('ticket-btn').value,
+                channelId: document.getElementById('ticket-channel').value,
+                transcriptChannelId: document.getElementById('transcript-channel').value
+            };
+            await fetch(`${API_URL}/ticket-settings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            alert("✅ تم حفظ إعدادات التذكرة بنجاح!");
+        }
+
+        async function sendTicketPanel() {
+            const res = await fetch(`${API_URL}/send-ticket-panel`, { method: 'POST' });
+            const data = await res.json();
+            if (data.success) alert("🚀 تم إنشاء لوحة التذاكر في السيرفر!");
+            else alert("❌ فشل الإرسال: " + data.error);
+        }
+
+        async function fetchModAliases() {
+            const res = await fetch(`${API_URL}/mod-aliases`);
+            const aliases = await res.json();
+            const list = document.getElementById('mod-list');
+            list.innerHTML = '';
+            aliases.forEach(alias => {
+                const c = alias.action === 'ban' ? '#ff4d4d' : alias.action === 'kick' ? '#ff9800' : '#3d5afe';
+                list.innerHTML += `<li><div><strong>${alias.trigger}</strong> ➡️ <span style="color:${c}; font-weight:bold;">${alias.action.toUpperCase()}</span></div><button class="btn btn-danger" onclick="deleteModAlias(${alias.id})">Delete</button></li>`;
+            });
+        }
+        async function addModAlias() {
+            const action = document.getElementById('mod-action').value, trigger = document.getElementById('mod-trigger').value;
+            if (!trigger) return alert("اكتب الكلمة!");
+            await fetch(`${API_URL}/mod-aliases`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, trigger }) });
+            document.getElementById('mod-trigger').value = '';
+            fetchModAliases();
+        }
+        async function deleteModAlias(id) { await fetch(`${API_URL}/mod-aliases/${id}`, { method: 'DELETE' }); fetchModAliases(); }
+
+        window.onload = () => { fetchRoles(); fetchCommands(); fetchTicketSettings(); fetchModAliases(); };
     </script>
 </body>
 </html>
