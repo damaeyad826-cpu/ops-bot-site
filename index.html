@@ -202,26 +202,26 @@
         }
 
         async function fetchRoles() {
-            const res = await fetch(\`\${API_URL}/roles\`);
+            const res = await fetch(`${API_URL}/roles`);
             const roles = await res.json();
             const cmdRoleSelect = document.getElementById('cmd-role');
             const modRoleSelect = document.getElementById('mod-role');
             
             roles.forEach(role => {
-                const optionHTML = \`<option value="\${role.id}">\${role.name}</option>\`;
+                const optionHTML = `<option value="${role.id}">${role.name}</option>`;
                 cmdRoleSelect.innerHTML += optionHTML;
                 modRoleSelect.innerHTML += optionHTML;
             });
         }
 
         async function fetchCommands() {
-            const res = await fetch(\`\${API_URL}/commands\`);
+            const res = await fetch(`${API_URL}/commands`);
             const cmds = await res.json();
             const list = document.getElementById('commands-list');
             list.innerHTML = '';
             cmds.forEach(cmd => {
-                const roleText = cmd.role ? \`<span class="badge">Role ID: \${cmd.role}</span>\` : \`<span class="badge" style="background:#1f2638;color:#8a93a8">Public</span>\`;
-                list.innerHTML += \`<li><div><strong>\${cmd.trigger}</strong> ➡️ \${cmd.response} \${roleText}</div><button class="btn btn-danger" onclick="deleteCommand(\${cmd.id})">Delete</button></li>\`;
+                const roleText = cmd.role ? `<span class="badge">Role ID: ${cmd.role}</span>` : `<span class="badge" style="background:#1f2638;color:#8a93a8">Public</span>`;
+                list.innerHTML += `<li><div><strong>${cmd.trigger}</strong> ➡️ ${cmd.response} ${roleText}</div><button class="btn btn-danger" onclick="deleteCommand(${cmd.id})">Delete</button></li>`;
             });
         }
 
@@ -230,17 +230,17 @@
             const response = document.getElementById('cmd-response').value;
             const role = document.getElementById('cmd-role').value;
             if (!trigger || !response) return alert("يرجى ملء الكلمة والرد!");
-            await fetch(\`\${API_URL}/commands\`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ trigger, response, role }) });
+            await fetch(`${API_URL}/commands`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ trigger, response, role }) });
             document.getElementById('cmd-trigger').value = '';
             document.getElementById('cmd-response').value = '';
             document.getElementById('cmd-role').value = '';
             fetchCommands();
         }
 
-        async function deleteCommand(id) { await fetch(\`\${API_URL}/commands/\${id}\`, { method: 'DELETE' }); fetchCommands(); }
+        async function deleteCommand(id) { await fetch(`${API_URL}/commands/${id}`, { method: 'DELETE' }); fetchCommands(); }
 
         async function fetchTicketSettings() {
-            const res = await fetch(\`\${API_URL}/ticket-settings\`);
+            const res = await fetch(`${API_URL}/ticket-settings`);
             const data = await res.json();
             if (data) {
                 document.getElementById('ticket-title').value = data.title || '';
@@ -259,26 +259,26 @@
                 channelId: document.getElementById('ticket-channel').value,
                 transcriptChannelId: document.getElementById('transcript-channel').value
             };
-            await fetch(\`\${API_URL}/ticket-settings\`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            await fetch(`${API_URL}/ticket-settings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
             alert("✅ تم حفظ إعدادات التذكرة بنجاح!");
         }
 
         async function sendTicketPanel() {
-            const res = await fetch(\`\${API_URL}/send-ticket-panel\`, { method: 'POST' });
+            const res = await fetch(`${API_URL}/send-ticket-panel`, { method: 'POST' });
             const data = await res.json();
             if (data.success) alert("🚀 تم إنشاء لوحة التذاكر في السيرفر!");
             else alert("❌ فشل الإرسال: " + data.error);
         }
 
         async function fetchModAliases() {
-            const res = await fetch(\`\${API_URL}/mod-aliases\`);
+            const res = await fetch(`${API_URL}/mod-aliases`);
             const aliases = await res.json();
             const list = document.getElementById('mod-list');
             list.innerHTML = '';
             aliases.forEach(alias => {
                 const c = alias.action === 'ban' ? '#ff4d4d' : alias.action === 'kick' ? '#ff9800' : '#3b59ff';
-                const roleText = alias.role ? \`<span class="badge">Role ID: \${alias.role}</span>\` : \`<span class="badge" style="background:#1f2638;color:#8a93a8">Admin Only</span>\`;
-                list.innerHTML += \`<li><div><strong>\${alias.trigger}</strong> ➡️ <span style="color:\${c}; font-weight:bold;">\${alias.action.toUpperCase()}</span> \${roleText}</div><button class="btn btn-danger" onclick="deleteModAlias(\${alias.id})">Delete</button></li>\`;
+                const roleText = alias.role ? `<span class="badge">Role ID: ${alias.role}</span>` : `<span class="badge" style="background:#1f2638;color:#8a93a8">Admin Only</span>`;
+                list.innerHTML += `<li><div><strong>${alias.trigger}</strong> ➡️ <span style="color:${c}; font-weight:bold;">${alias.action.toUpperCase()}</span> ${roleText}</div><button class="btn btn-danger" onclick="deleteModAlias(${alias.id})">Delete</button></li>`;
             });
         }
 
@@ -287,16 +287,18 @@
             const trigger = document.getElementById('mod-trigger').value;
             const role = document.getElementById('mod-role').value;
             if (!trigger) return alert("اكتب الكلمة المفتاحية!");
-            await fetch(\`\${API_URL}/mod-aliases\`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, trigger, role }) });
+            await fetch(`${API_URL}/mod-aliases`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, trigger, role }) });
             document.getElementById('mod-trigger').value = '';
             document.getElementById('mod-role').value = '';
             fetchModAliases();
         }
 
-        async function deleteModAlias(id) { await fetch(\`\${API_URL}/mod-aliases/\${id}\`, { method: 'DELETE' }); fetchModAliases(); }
+        async function deleteModAlias(id) { await fetch(`${API_URL}/mod-aliases/${id}`, { method: 'DELETE' }); fetchModAliases(); }
 
         window.onload = () => { fetchRoles(); fetchCommands(); fetchTicketSettings(); fetchModAliases(); };
     </script>
+</body>
+</html>
 </body>
 </html>
     `);
