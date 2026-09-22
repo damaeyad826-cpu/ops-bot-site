@@ -1,256 +1,522 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة معلومات البوت والدعم</title>
+    <title>OPs Bot - Dashboard</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #313338;
-            --panel-color: #2b2d31;
-            --card-color: #111214;
-            --accent-color: #5865F2;
-            --accent-hover: #4752C4;
-            --text-main: #dbdee1;
-            --text-muted: #949ba4;
-            --border-color: #3f4147;
+            --bg-dark: #080b13;
+            --panel-bg: rgba(14, 20, 37, 0.85);
+            --card-bg: #0d1326;
+            --accent-blue: #3b82f6;
+            --accent-glow: #1d4ed8;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+            --btn-discord: #5865f2;
+            --success: #10b981;
+            --danger: #ef4444;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            line-height: 1.6;
-            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(29, 78, 216, 0.15) 0%, transparent 40%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
+        /* Navbar Header */
         header {
-            text-align: center;
-            padding: 40px 20px;
-            background: var(--panel-color);
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        header h1 {
-            color: #ffffff;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        section {
-            background: var(--panel-color);
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        h2 {
-            color: #ffffff;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-
-        h3 {
-            color: var(--accent-color);
-            margin-top: 15px;
-            margin-bottom: 10px;
-        }
-
-        p, ul {
-            margin-bottom: 15px;
-            color: var(--text-main);
-        }
-
-        ul {
-            padding-right: 20px;
-        }
-
-        ul li {
-            margin-bottom: 8px;
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: right;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 50px;
+            background: rgba(8, 11, 19, 0.8);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
         }
 
-        th {
-            background-color: var(--card-color);
-            color: #ffffff;
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 700;
         }
 
-        tr:hover {
-            background-color: rgba(255,255,255,0.02);
+        .logo-container i {
+            color: var(--accent-blue);
+            font-size: 1.8rem;
         }
 
-        code {
-            background-color: var(--card-color);
-            color: #f47fff;
-            padding: 2px 6px;
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--text-main);
+        }
+
+        .btn-add-discord {
+            background-color: var(--btn-discord);
+            color: white;
+            padding: 9px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .btn-add-discord:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Banner Hero Section */
+        .hero-banner {
+            padding: 40px 50px;
+            background: radial-gradient(ellipse at top, rgba(29, 78, 216, 0.25) 0%, transparent 70%);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-glow));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .hero-title h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        .hero-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            display: flex;
+            gap: 30px;
+            max-width: 1300px;
+            margin: 40px auto;
+            width: 90%;
+            flex: 1;
+        }
+
+        /* Sidebar Nav */
+        .sidebar {
+            width: 280px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            height: fit-content;
+        }
+
+        .sidebar-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        .sidebar-btn.active {
+            background: var(--accent-glow);
+            color: white;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4);
+        }
+
+        .admin-badge-box {
+            margin-top: 20px;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px dashed var(--accent-blue);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Main Content Section */
+        .main-content {
+            flex: 1;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-create {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .btn-create:hover {
+            background: var(--accent-glow);
+        }
+
+        /* Commands Table / Cards */
+        .command-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .command-info h4 {
+            font-size: 1.1rem;
+            color: var(--accent-blue);
+            margin-bottom: 5px;
+        }
+
+        .command-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .role-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 3px 8px;
             border-radius: 4px;
-            font-family: monospace;
+            font-size: 0.78rem;
+            margin-top: 8px;
+            color: var(--text-main);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-action:hover {
+            color: white;
+            border-color: var(--text-muted);
+        }
+
+        .btn-delete:hover {
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        /* Modal Form for New Command */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 16px;
+            width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+            outline: none;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         footer {
             text-align: center;
             padding: 20px;
             color: var(--text-muted);
-            font-size: 0.9rem;
             border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
             margin-top: 40px;
-        }
-
-        @media(max-width: 768px) {
-            header h1 { font-size: 2rem; }
-            section { padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- رأس الصفحة -->
-        <header>
-            <h1>نظام إدارة السيرفر والدعم الفني</h1>
-            <p>دليل أوامر البوت، شروط الخدمة، وسياسة الخصوصية</p>
-        </header>
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo-container">
+            <i class="fa-solid fa-robot"></i>
+            <span>OPs Bot</span>
+        </div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </nav>
+        <a href="#" class="btn-add-discord"><i class="fa-brands fa-discord"></i> Add to Discord</a>
+    </header>
 
-        <!-- قسم الأوامر والصلاحيات -->
-        <section id="commands">
-            <h2>🤖 أوامر البوت والصلاحيات</h2>
-            <p>يتضمن البوت مجموعة متكاملة من الأوامر الإدارية وأوامر الدعم الفني الموزعة حسب الصلاحيات التالية:</p>
-            
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>الأمر</th>
-                            <th>الوصف</th>
-                            <th>الفئة المسموح لها بالاستخدام</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>!سجن @يوزر</code></td>
-                            <td>سجن العضو مع اختيار السبب (قذف، سراق، سبب آخر) وإزالة رتبه السابقة.</td>
-                            <td>الإداريون / طاقم الإشراف</td>
-                        </tr>
-                        <tr>
-                            <td><code>!عفو @يوزر</code></td>
-                            <td>إزالة رتبة السجن وإرجاع رتبة الميمبر الأساسية للعضو.</td>
-                            <td>الإداريون / طاقم الإشراف</td>
-                        </tr>
-                        <tr>
-                            <td><code>!بان / !كيك</code></td>
-                            <td>حظر أو طرد عضو من السيرفر.</td>
-                            <td>المسؤولون وصلاحيات الحظر/الطرد</td>
-                        </tr>
-                        <tr>
-                            <td><code>!ارجع [الايدي]</code></td>
-                            <td>فك الحظر عن العضو باستخدام الايدي.</td>
-                            <td>صلاحيات الحظر</td>
-                        </tr>
-                        <tr>
-                            <td><code>!تحذير / !تحذيرات / !شيل</code></td>
-                            <td>إضافة تحذير لعضو، عرض سجل التحذيرات، أو إزالة تحذير محدد.</td>
-                            <td>الإداريون</td>
-                        </tr>
-                        <tr>
-                            <td><code>!تايم / !انتايم</code></td>
-                            <td>إعطاء تايم مؤقت للعضو أو فكه عنه.</td>
-                            <td>الإداريون</td>
-                        </tr>
-                        <tr>
-                            <td><code>!رول / !رولات</code></td>
-                            <td>إضافة/إزالة رتبة مفردة أو تفعيل جلسة تفاعلية لإضافة رتب متعددة.</td>
-                            <td>الإداريون</td>
-                        </tr>
-                        <tr>
-                            <td><code>!فصل</code></td>
-                            <td>إزالة رتب الإدارة عن العضو وإعطائه رتبة الفصل.</td>
-                            <td>أصحاب صلاحيات الفصل المحددة</td>
-                        </tr>
-                        <tr>
-                            <td><code>!نقاط / !نقاطي / !توب</code></td>
-                            <td>عرض نقاط الإداريين، نقاطك الشخصية، أو توب التفاعل والـ XP.</td>
-                            <td>الإداريون / الأعضاء</td>
-                        </tr>
-                        <tr>
-                            <td><code>Create Ticket</code></td>
-                            <td>فتح تذكرة دعم فني جديدة من خلال لوحة التكتات.</td>
-                            <td>جميع الأعضاء</td>
-                        </tr>
-                        <tr>
-                            <td><code>استلام التكت</code></td>
-                            <td>استلام التذكرة من قِبل طاقم الدعم وكسب نقاط إدارية.</td>
-                            <td>طاقم الدعم الفني والإدارة</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- شروط الخدمة -->
-        <section id="terms">
-            <h2>📜 شروط الخدمة (Terms of Service)</h2>
-            <p>باستخدامك لهذا البوت أو تفاعلك مع خدمات السيرفر، فإنك توافق على الالتزام بالشروط الآتية:</p>
-            <ul>
-                <li><strong>الاستخدام العادل:</strong> يمنع استخدام أوامر البوت (مثل السجن، التحذيرات، أو فتح التكتات) بطريقة مزعجة أو استهبالية تعرض النظام للضغط أو الإزعاج.</li>
-                <li><strong>احترام الطاقم الإداري:</strong> يمنع نهائياً التعامل بطريقة فظة أو غير لائق مع الطاقم الإداري أثناء التواجد في التذاكر أو الرومات العامة.</li>
-                <li><strong>العقوبات التلقائية:</strong> أي مخالفة لقوانين السيرفر تعرض العضو للإجراءات التأديبية مثل السجن، التحذير، أو الحظر بناءً على تقدير الطاقم المختص.</li>
-                <li><strong>مسؤولية الحساب:</strong> يتحمل المستخدم المسؤولية الكاملة عن أي استخدام يصدر من حسابه داخل السيرفر.</li>
-            </ul>
-        </section>
-
-        <!-- سياسة الخصوصية -->
-        <section id="privacy">
-            <h2>🔒 سياسة الخصوصية (Privacy Policy)</h2>
-            <p>نحن نحمي خصوصية بياناتك ونلتزم بتوضيح كيفية جمع واستخدام المعلومات:</p>
-            <ul>
-                <li><strong>البيانات التي يتم جمعها:</strong> يقوم البوت بتخزين بيانات محدودة وضرورية لعمل النظام مثل: سجلات التحذيرات، نقاط الإداريين، تذاكر الدعم الفني المفتوحة، ونقاط التفاعل (XP).</li>
-                <li><strong>استخدام البيانات:</strong> تُستخدم هذه البيانات حصرياً لغرض إدارة السيرفر، حفظ أمنه، وتتبع أداء طاقم الإدارة والدعم الفني.</li>
-                <li><strong>حماية المعلومات:</strong> لا يتم مشاركة أي بيانات تخص الأعضاء أو سجلاتهم مع أي أطراف خارجية، وتُحفظ قاعدة البيانات بشكل آمن داخل بيئة تشغيل البوت.</li>
-                <li><strong>حذف البيانات:</strong> يتم حذف أو أرشفة تذاكر الدعم الفني وسجلات التحذيرات وفقاً لحاجة السيرفر التنظيمية وقواعد الاستخدام.</li>
-            </ul>
-        </section>
-
-        <!-- تذييل الصفحة -->
-        <footer>
-            <p>جميع الحقوق محفوظة © 2026 - نظام إدارة السيرفر والدعم الفني</p>
-        </footer>
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <div class="hero-icon">
+            <i class="fa-solid fa-sliders"></i>
+        </div>
+        <div class="hero-title">
+            <h1>Control Panel & Custom Commands</h1>
+            <p>Manage your custom responses, permissions, and server settings effortlessly.</p>
+        </div>
     </div>
 
+    <!-- Main Container -->
+    <div class="dashboard-container">
+        
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <button class="sidebar-btn active"><i class="fa-solid fa-terminal"></i> Custom Commands</button>
+            <button class="sidebar-btn"><i class="fa-solid fa-shield-halved"></i> Moderation Settings</button>
+            <button class="sidebar-btn"><i class="fa-solid fa-ticket"></i> Ticket System</button>
+            <button class="sidebar-btn"><i class="fa-solid fa-star"></i> Leveling & XP</button>
+
+            <div class="admin-badge-box">
+                <i class="fa-solid fa-lock" style="color: var(--accent-blue); font-size: 1.2rem;"></i>
+                <div>
+                    <strong>Administrator Role Required</strong>
+                    <p>Only users with Admin permissions can edit commands.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="main-content">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-code" style="color: var(--accent-blue);"></i> Custom Commands</h2>
+                <button class="btn-create" onclick="openModal()"><i class="fa-solid fa-plus"></i> Add New Command</button>
+            </div>
+
+            <!-- List of Commands -->
+            <div id="commands-list">
+                <!-- Example Command 1 -->
+                <div class="command-card">
+                    <div class="command-info">
+                        <h4>!rules</h4>
+                        <p><strong>Response:</strong> Please follow the server rules and respect all members!</p>
+                        <span class="role-badge"><i class="fa-solid fa-user-shield"></i> Allowed Roles: Everyone</span>
+                    </div>
+                    <div class="action-btns">
+                        <button class="btn-action"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-action btn-delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <!-- Example Command 2 -->
+                <div class="command-card">
+                    <div class="command-info">
+                        <h4>!vip</h4>
+                        <p><strong>Response:</strong> Welcome to the VIP lounge! Enjoy your exclusive perks.</p>
+                        <span class="role-badge"><i class="fa-solid fa-crown" style="color: #f59e0b;"></i> Allowed Roles: VIP Role Only</span>
+                    </div>
+                    <div class="action-btns">
+                        <button class="btn-action"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-action btn-delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Form for Adding Command -->
+    <div class="modal" id="commandModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-plus-circle" style="color: var(--accent-blue);"></i> Add Custom Command</h3>
+            
+            <div class="form-group">
+                <label>Command Trigger (e.g., !ip, !store)</label>
+                <input type="text" id="cmdTrigger" placeholder="!mycommand">
+            </div>
+
+            <div class="form-group">
+                <label>Bot Response</label>
+                <textarea id="cmdResponse" rows="3" placeholder="Enter what the bot should say..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Required Role / Access Level</label>
+                <select id="cmdRole">
+                    <option value="everyone">Everyone</option>
+                    <option value="admin">Administrators Only</option>
+                    <option value="moderator">Moderators</option>
+                    <option value="vip">VIP Members</option>
+                </select>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-action" onclick="closeModal()">Cancel</button>
+                <button class="btn-create" onclick="addCommand()">Save Command</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 OPs Bot Dashboard. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        function openModal() {
+            document.getElementById('commandModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('commandModal').style.display = 'none';
+        }
+
+        function addCommand() {
+            const trigger = document.getElementById('cmdTrigger').value;
+            const response = document.getElementById('cmdResponse').value;
+            const role = document.getElementById('cmdRole').options[document.getElementById('cmdRole').selectedIndex].text;
+
+            if(!trigger || !response) {
+                alert('Please fill in all required fields!');
+                return;
+            }
+
+            const commandList = document.getElementById('commands-list');
+            const newCard = document.createElement('div');
+            newCard.className = 'command-card';
+            newCard.innerHTML = `
+                <div class="command-info">
+                    <h4>${trigger}</h4>
+                    <p><strong>Response:</strong> ${response}</p>
+                    <span class="role-badge"><i class="fa-solid fa-user-shield"></i> Allowed Roles: ${role}</span>
+                </div>
+                <div class="action-btns">
+                    <button class="btn-action"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn-action btn-delete" onclick="this.closest('.command-card').remove()"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `;
+
+            commandList.appendChild(newCard);
+            
+            // Clear inputs and close modal
+            document.getElementById('cmdTrigger').value = '';
+            document.getElementById('cmdResponse').value = '';
+            closeModal();
+        }
+    </script>
 </body>
 </html>
