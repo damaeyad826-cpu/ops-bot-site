@@ -17,7 +17,6 @@
             --text-muted: #94a3b8;
             --border-color: #1e293b;
             --btn-discord: #5865f2;
-            --success: #10b981;
             --danger: #ef4444;
         }
 
@@ -202,6 +201,14 @@
             padding: 30px;
         }
 
+        .tab-section {
+            display: none;
+        }
+
+        .tab-section.active-tab {
+            display: block;
+        }
+
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -236,7 +243,7 @@
             background: var(--accent-glow);
         }
 
-        /* Commands Table / Cards */
+        /* Commands Card */
         .command-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -294,7 +301,19 @@
             border-color: var(--danger);
         }
 
-        /* Modal Form for New Command */
+        /* Placeholder style for other tabs */
+        .tab-placeholder {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-muted);
+        }
+        .tab-placeholder i {
+            font-size: 3rem;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+        }
+
+        /* Modal Form */
         .modal {
             display: none;
             position: fixed;
@@ -362,10 +381,8 @@
             <span>OPs Bot</span>
         </div>
         <nav>
-            <a href="#">Home</a>
-            <a href="#" class="active">Dashboard</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
+            <a href="#" class="active">Home</a>
+            <a href="#">Dashboard</a>
         </nav>
         <a href="#" class="btn-add-discord"><i class="fa-brands fa-discord"></i> Add to Discord</a>
     </header>
@@ -386,10 +403,18 @@
         
         <!-- Sidebar Navigation -->
         <div class="sidebar">
-            <button class="sidebar-btn active"><i class="fa-solid fa-terminal"></i> Custom Commands</button>
-            <button class="sidebar-btn"><i class="fa-solid fa-shield-halved"></i> Moderation Settings</button>
-            <button class="sidebar-btn"><i class="fa-solid fa-ticket"></i> Ticket System</button>
-            <button class="sidebar-btn"><i class="fa-solid fa-star"></i> Leveling & XP</button>
+            <button class="sidebar-btn active" onclick="switchTab(event, 'commands-tab')">
+                <i class="fa-solid fa-terminal"></i> Custom Commands
+            </button>
+            <button class="sidebar-btn" onclick="switchTab(event, 'moderation-tab')">
+                <i class="fa-solid fa-shield-halved"></i> Moderation Settings
+            </button>
+            <button class="sidebar-btn" onclick="switchTab(event, 'tickets-tab')">
+                <i class="fa-solid fa-ticket"></i> Ticket System
+            </button>
+            <button class="sidebar-btn" onclick="switchTab(event, 'leveling-tab')">
+                <i class="fa-solid fa-star"></i> Leveling & XP
+            </button>
 
             <div class="admin-badge-box">
                 <i class="fa-solid fa-lock" style="color: var(--accent-blue); font-size: 1.2rem;"></i>
@@ -402,44 +427,70 @@
 
         <!-- Content Area -->
         <div class="main-content">
-            <div class="section-header">
-                <h2><i class="fa-solid fa-code" style="color: var(--accent-blue);"></i> Custom Commands</h2>
-                <button class="btn-create" onclick="openModal()"><i class="fa-solid fa-plus"></i> Add New Command</button>
-            </div>
-
-            <!-- List of Commands -->
-            <div id="commands-list">
-                <!-- Example Command 1 -->
-                <div class="command-card">
-                    <div class="command-info">
-                        <h4>!rules</h4>
-                        <p><strong>Response:</strong> Please follow the server rules and respect all members!</p>
-                        <span class="role-badge"><i class="fa-solid fa-user-shield"></i> Allowed Roles: Everyone</span>
-                    </div>
-                    <div class="action-btns">
-                        <button class="btn-action"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn-action btn-delete"><i class="fa-solid fa-trash"></i></button>
-                    </div>
+            
+            <!-- Tab 1: Custom Commands -->
+            <div id="commands-tab" class="tab-section active-tab">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-code" style="color: var(--accent-blue);"></i> Custom Commands</h2>
+                    <button class="btn-create" onclick="openModal()"><i class="fa-solid fa-plus"></i> Add New Command</button>
                 </div>
 
-                <!-- Example Command 2 -->
-                <div class="command-card">
-                    <div class="command-info">
-                        <h4>!vip</h4>
-                        <p><strong>Response:</strong> Welcome to the VIP lounge! Enjoy your exclusive perks.</p>
-                        <span class="role-badge"><i class="fa-solid fa-crown" style="color: #f59e0b;"></i> Allowed Roles: VIP Role Only</span>
-                    </div>
-                    <div class="action-btns">
-                        <button class="btn-action"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn-action btn-delete"><i class="fa-solid fa-trash"></i></button>
+                <div id="commands-list">
+                    <div class="command-card">
+                        <div class="command-info">
+                            <h4>!rules</h4>
+                            <p><strong>Response:</strong> Please follow the server rules and respect all members!</p>
+                            <span class="role-badge"><i class="fa-solid fa-user-shield"></i> Allowed Roles: Everyone</span>
+                        </div>
+                        <div class="action-btns">
+                            <button class="btn-action"><i class="fa-solid fa-pen"></i></button>
+                            <button class="btn-action btn-delete" onclick="this.closest('.command-card').remove()"><i class="fa-solid fa-trash"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Tab 2: Moderation -->
+            <div id="moderation-tab" class="tab-section">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-shield-halved" style="color: var(--accent-blue);"></i> Moderation Settings</h2>
+                </div>
+                <div class="tab-placeholder">
+                    <i class="fa-solid fa-gears"></i>
+                    <h3>Moderation Configuration</h3>
+                    <p>Configure auto-mod rules, punishments, and security settings here soon.</p>
+                </div>
+            </div>
+
+            <!-- Tab 3: Tickets -->
+            <div id="tickets-tab" class="tab-section">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-ticket" style="color: var(--accent-blue);"></i> Ticket System</h2>
+                </div>
+                <div class="tab-placeholder">
+                    <i class="fa-solid fa-headset"></i>
+                    <h3>Support Tickets Panel</h3>
+                    <p>Manage support categories and staff permissions for tickets.</p>
+                </div>
+            </div>
+
+            <!-- Tab 4: Leveling -->
+            <div id="leveling-tab" class="tab-section">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-star" style="color: var(--accent-blue);"></i> Leveling & XP</h2>
+                </div>
+                <div class="tab-placeholder">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <h3>XP and Ranks Configuration</h3>
+                    <p>Customize message XP gains, level-up notifications, and reward roles.</p>
+                </div>
+            </div>
+
         </div>
 
     </div>
 
-    <!-- Modal Form for Adding Command -->
+    <!-- Modal Form -->
     <div class="modal" id="commandModal">
         <div class="modal-content">
             <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-plus-circle" style="color: var(--accent-blue);"></i> Add Custom Command</h3>
@@ -477,6 +528,22 @@
 
     <!-- Interactive JavaScript -->
     <script>
+        // Tab Switching Logic
+        function switchTab(event, tabId) {
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.sidebar-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Hide all tab sections
+            const sections = document.querySelectorAll('.tab-section');
+            sections.forEach(sec => sec.classList.remove('active-tab'));
+
+            // Add active to clicked button and target section
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active-tab');
+        }
+
+        // Modal Functions
         function openModal() {
             document.getElementById('commandModal').style.display = 'flex';
         }
@@ -512,7 +579,6 @@
 
             commandList.appendChild(newCard);
             
-            // Clear inputs and close modal
             document.getElementById('cmdTrigger').value = '';
             document.getElementById('cmdResponse').value = '';
             closeModal();
