@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة معلومات البوت والدعم</title>
+    <style>
+        :root {
+            --bg-color: #313338;
+            --panel-color: #2b2d31;
+            --card-color: #111214;
+            --accent-color: #5865F2;
+            --accent-hover: #4752C4;
+            --text-main: #dbdee1;
+            --text-muted: #949ba4;
+            --border-color: #3f4147;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--panel-color);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        header h1 {
+            color: #ffffff;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        section {
+            background: var(--panel-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            color: #ffffff;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        p, ul {
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        ul {
+            padding-right: 20px;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--card-color);
+            color: #ffffff;
+        }
+
+        tr:hover {
+            background-color: rgba(255,255,255,0.02);
+        }
+
+        code {
+            background-color: var(--card-color);
+            color: #f47fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        @media(max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            section { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- رأس الصفحة -->
+        <header>
+            <h1>نظام إدارة السيرفر والدعم الفني</h1>
+            <p>دليل أوامر البوت، شروط الخدمة، وسياسة الخصوصية</p>
+        </header>
+
+        <!-- قسم الأوامر والصلاحيات -->
+        <section id="commands">
+            <h2>🤖 أوامر البوت والصلاحيات</h2>
+            <p>يتضمن البوت مجموعة متكاملة من الأوامر الإدارية وأوامر الدعم الفني الموزعة حسب الصلاحيات التالية:</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الأمر</th>
+                            <th>الوصف</th>
+                            <th>الفئة المسموح لها بالاستخدام</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>!سجن @يوزر</code></td>
+                            <td>سجن العضو مع اختيار السبب (قذف، سراق، سبب آخر) وإزالة رتبه السابقة.</td>
+                            <td>الإداريون / طاقم الإشراف</td>
+                        </tr>
+                        <tr>
+                            <td><code>!عفو @يوزر</code></td>
+                            <td>إزالة رتبة السجن وإرجاع رتبة الميمبر الأساسية للعضو.</td>
+                            <td>الإداريون / طاقم الإشراف</td>
+                        </tr>
+                        <tr>
+                            <td><code>!بان / !كيك</code></td>
+                            <td>حظر أو طرد عضو من السيرفر.</td>
+                            <td>المسؤولون وصلاحيات الحظر/الطرد</td>
+                        </tr>
+                        <tr>
+                            <td><code>!ارجع [الايدي]</code></td>
+                            <td>فك الحظر عن العضو باستخدام الايدي.</td>
+                            <td>صلاحيات الحظر</td>
+                        </tr>
+                        <tr>
+                            <td><code>!تحذير / !تحذيرات / !شيل</code></td>
+                            <td>إضافة تحذير لعضو، عرض سجل التحذيرات، أو إزالة تحذير محدد.</td>
+                            <td>الإداريون</td>
+                        </tr>
+                        <tr>
+                            <td><code>!تايم / !انتايم</code></td>
+                            <td>إعطاء تايم مؤقت للعضو أو فكه عنه.</td>
+                            <td>الإداريون</td>
+                        </tr>
+                        <tr>
+                            <td><code>!رول / !رولات</code></td>
+                            <td>إضافة/إزالة رتبة مفردة أو تفعيل جلسة تفاعلية لإضافة رتب متعددة.</td>
+                            <td>الإداريون</td>
+                        </tr>
+                        <tr>
+                            <td><code>!فصل</code></td>
+                            <td>إزالة رتب الإدارة عن العضو وإعطائه رتبة الفصل.</td>
+                            <td>أصحاب صلاحيات الفصل المحددة</td>
+                        </tr>
+                        <tr>
+                            <td><code>!نقاط / !نقاطي / !توب</code></td>
+                            <td>عرض نقاط الإداريين، نقاطك الشخصية، أو توب التفاعل والـ XP.</td>
+                            <td>الإداريون / الأعضاء</td>
+                        </tr>
+                        <tr>
+                            <td><code>Create Ticket</code></td>
+                            <td>فتح تذكرة دعم فني جديدة من خلال لوحة التكتات.</td>
+                            <td>جميع الأعضاء</td>
+                        </tr>
+                        <tr>
+                            <td><code>استلام التكت</code></td>
+                            <td>استلام التذكرة من قِبل طاقم الدعم وكسب نقاط إدارية.</td>
+                            <td>طاقم الدعم الفني والإدارة</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- شروط الخدمة -->
+        <section id="terms">
+            <h2>📜 شروط الخدمة (Terms of Service)</h2>
+            <p>باستخدامك لهذا البوت أو تفاعلك مع خدمات السيرفر، فإنك توافق على الالتزام بالشروط الآتية:</p>
+            <ul>
+                <li><strong>الاستخدام العادل:</strong> يمنع استخدام أوامر البوت (مثل السجن، التحذيرات، أو فتح التكتات) بطريقة مزعجة أو استهبالية تعرض النظام للضغط أو الإزعاج.</li>
+                <li><strong>احترام الطاقم الإداري:</strong> يمنع نهائياً التعامل بطريقة فظة أو غير لائق مع الطاقم الإداري أثناء التواجد في التذاكر أو الرومات العامة.</li>
+                <li><strong>العقوبات التلقائية:</strong> أي مخالفة لقوانين السيرفر تعرض العضو للإجراءات التأديبية مثل السجن، التحذير، أو الحظر بناءً على تقدير الطاقم المختص.</li>
+                <li><strong>مسؤولية الحساب:</strong> يتحمل المستخدم المسؤولية الكاملة عن أي استخدام يصدر من حسابه داخل السيرفر.</li>
+            </ul>
+        </section>
+
+        <!-- سياسة الخصوصية -->
+        <section id="privacy">
+            <h2>🔒 سياسة الخصوصية (Privacy Policy)</h2>
+            <p>نحن نحمي خصوصية بياناتك ونلتزم بتوضيح كيفية جمع واستخدام المعلومات:</p>
+            <ul>
+                <li><strong>البيانات التي يتم جمعها:</strong> يقوم البوت بتخزين بيانات محدودة وضرورية لعمل النظام مثل: سجلات التحذيرات، نقاط الإداريين، تذاكر الدعم الفني المفتوحة، ونقاط التفاعل (XP).</li>
+                <li><strong>استخدام البيانات:</strong> تُستخدم هذه البيانات حصرياً لغرض إدارة السيرفر، حفظ أمنه، وتتبع أداء طاقم الإدارة والدعم الفني.</li>
+                <li><strong>حماية المعلومات:</strong> لا يتم مشاركة أي بيانات تخص الأعضاء أو سجلاتهم مع أي أطراف خارجية، وتُحفظ قاعدة البيانات بشكل آمن داخل بيئة تشغيل البوت.</li>
+                <li><strong>حذف البيانات:</strong> يتم حذف أو أرشفة تذاكر الدعم الفني وسجلات التحذيرات وفقاً لحاجة السيرفر التنظيمية وقواعد الاستخدام.</li>
+            </ul>
+        </section>
+
+        <!-- تذييل الصفحة -->
+        <footer>
+            <p>جميع الحقوق محفوظة © 2026 - نظام إدارة السيرفر والدعم الفني</p>
+        </footer>
+    </div>
+
+</body>
+</html>
