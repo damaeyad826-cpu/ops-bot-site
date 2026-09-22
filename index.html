@@ -49,7 +49,6 @@
             <div class="form-group"><label>Bot Response (رد البوت)</label><textarea id="cmd-response" placeholder="مثال: وعليكم السلام"></textarea></div>
             <div class="form-group">
                 <label>Select Required Role (الرتبة المسموح لها - اختياري)</label>
-                <!-- هذه القائمة ستمتلئ تلقائياً من سيرفر الديسكورد -->
                 <select id="cmd-role">
                     <option value="">✅ مسموح للجميع (Public)</option>
                 </select>
@@ -66,7 +65,6 @@
             <div class="form-group"><label>Button Text (نص الزر)</label><input type="text" id="ticket-btn"></div>
             <div class="form-group"><label>Channel ID (روم لوحة التذاكر)</label><input type="text" id="ticket-channel" placeholder="أيدي الروم الذي سيظهر فيه زر التذكرة"></div>
             
-            <!-- إضافة خاصة بالترانسكربت -->
             <div class="form-group">
                 <label style="color: var(--success);">Transcript Channel ID (روم حفظ السجلات بعد الإغلاق)</label>
                 <input type="text" id="transcript-channel" placeholder="ضع أيدي الروم الذي سيُرسل إليه ملف المحادثة">
@@ -101,7 +99,6 @@
             event.currentTarget.classList.add('active');
         }
 
-        // جلب الرتب من السيرفر وإضافتها للقائمة المنسدلة
         async function fetchRoles() {
             const res = await fetch(`${API_URL}/roles`);
             const roles = await res.json();
